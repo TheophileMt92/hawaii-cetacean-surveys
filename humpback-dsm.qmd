@@ -295,6 +295,14 @@ cancel, so the whole is estimated more precisely than any of its parts.
 
 ## What this does not show
 
+**This is not the Hawaii humpback population.** The SPLASH study estimated
+10,103 humpback whales wintering in the Hawaiian Islands in 2004–2006, a figure
+NOAA now treats as a minimum. The estimate here is for the WHICEAS study area —
+EEZ waters worked by a ship on offshore transects — and the densest wintering
+aggregations are in shallow nearshore water, notably off west Maui, where this
+survey has essentially no effort. The shallowest segment in the dataset is in
+99 m of water. The two numbers measure different things.
+
 **One species, one season, one year.** Winter 2020 humpbacks only. Nothing here
 extends to other species, and the summer survey cannot support the same
 analysis.
