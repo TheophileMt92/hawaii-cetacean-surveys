@@ -1,0 +1,47 @@
+---
+title: "Cetaceans in the Hawaiian Islands EEZ"
+subtitle: "Two analyses of NOAA Pacific Islands Fisheries Science Center survey data"
+author: "Théophile L. Mouton"
+date: today
+format:
+  html:
+    output-file: index.html
+    embed-resources: true
+    css: Quarto_template/custom.css
+    include-before-body: Quarto_template/header.html
+    include-after-body: Quarto_template/footer.html
+    theme: none
+    toc: false
+    fig-align: center
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+Two reports built on cetacean survey data from the NOAA Pacific Islands
+Fisheries Science Center. They are meant to be read in order: the first maps
+what the public sighting archive can show, the second uses line-transect data
+to do what that archive cannot.
+
+### [Seasonal cetacean sighting records](cetacean-seasonal-map.html)
+
+Where cetaceans were recorded across the Hawaiian Islands EEZ, month by month,
+from nine survey cruises between 2009 and 2017. An animated map over
+bathymetry, and an account of why a record of sightings without a record of
+effort can describe distribution but not abundance.
+
+### [A density surface model for humpback whales](humpback-dsm.html)
+
+Line-transect data from the winter 2020 survey, reprocessed with PIFSC's own
+software into 10 km segments, fitted with a detection function and a Tweedie
+GAM over depth and space, and predicted across the study area. The resulting
+abundance estimate is compared against the published design-based figure for
+the same survey.
+
+---
+
+Code and data sources for both are in the
+[repository](https://github.com/TheophileMt92/hawaii-cetacean-seasonality).
+Survey data collected by NOAA Pacific Islands Fisheries Science Center,
+Protected Species Division.

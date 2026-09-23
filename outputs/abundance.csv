@@ -1,0 +1,11 @@
+quantity,value
+N (uncorrected),1897
+N (g0-corrected),2790
+density /km²,0.00665
+CV gam,0.256
+CV detection,0.109
+CV g(0),0.36
+CV total,0.455
+lower 95%,1193
+upper 95%,6529
+N unclamped (sensitivity),2811
