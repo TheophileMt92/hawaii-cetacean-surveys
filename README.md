@@ -1,137 +1,93 @@
-# hawaii-cetacean-seasonality
+# Cetaceans in the Hawaiian Islands EEZ
 
-Seasonal distribution of systematic cetacean sighting records in the Hawaiian
-Islands EEZ, from NOAA PIFSC shipboard surveys, 2009–2017.
+Two analyses of cetacean survey data from the NOAA Pacific Islands Fisheries
+Science Center (PIFSC), written in R and wrapped in Quarto reports.
 
-![September, the densest month](outputs/figures/still_september.png)
+**[Read the reports →](https://theophilemt92.github.io/hawaii-cetacean-seasonality/)**
 
-A twelve-frame animation, January to December, of every systematic
-species-identified sighting in the public WinCruz record. Bathymetry
-underneath, EEZ boundary outlined, the species seen that month down the right.
+![](outputs/figures/fig_panel.png)
 
-Full animation: [`outputs/hawaii_cetacean_seasonal.mp4`](outputs/hawaii_cetacean_seasonal.mp4)
-Written report: [theophilemt92.github.io/hawaii-cetacean-seasonality](https://theophilemt92.github.io/hawaii-cetacean-seasonality)
+---
 
-## What the map shows, and what it does not
+## 1. Seasonal cetacean sighting records
 
-It shows **sighting records, not animals**. The public dataset contains
-sightings only — there is no trackline or effort file — so the map describes
-where observations were written down, not where cetaceans are.
+An animated map of where cetaceans were recorded across the Hawaiian Islands
+EEZ, month by month, over bathymetry.
 
-Blank months are months with **no systematic line-transect effort**. That is
-not the same as no survey activity, and certainly not no animals. March and
-April both carry records under other effort types; December carries none at
-all.
+370 sightings of 24 identified species, from nine survey cruises between 2009
+and 2017, inside the 2,474,715 km² EEZ. The report is as much about what the
+data cannot say as what it can: the public archive records sightings without
+recording effort, so it can describe where animals were seen but not how many
+there are, and apparent seasonal pattern is partly the pattern of when ships
+were at sea.
 
-## From 1,492 records to 370 sightings
+Source: [NOAA InPort item 18141](https://www.fisheries.noaa.gov/inport/item/18141).
 
-| step | n |
-|---|---|
-| all records | 1,492 |
-| cetaceans (excludes turtles, monk seal) | 1,491 |
-| identified to species | 1,042 |
-| Hawaiian Islands EEZ | 882 |
-| systematic effort | **370** |
+## 2. A density surface model for humpback whales
 
-370 sightings across **24 species**, from nine cruises between 2009 and 2017,
-in an EEZ of 2,474,715 km².
+What the sighting archive cannot support, line-transect data can. This report
+reprocesses PIFSC's own WinCruz DAS files into 10 km segments, fits a detection
+function and a spatial model, and estimates abundance for the winter 2020
+survey (WHICEAS).
 
-Group size is deliberately *not* required. The map draws one point per
-sighting regardless of how many animals were in the group, so a missing
-group-size estimate is no reason to drop a record. (It would be, for a density
-estimate — different question, different filter.)
+448 systematic on-effort segments, 4,440 km of trackline, 72 humpback whale
+detections within a 5.5 km truncation. A half-normal detection function and a
+Tweedie GAM over depth and position, corrected for incomplete trackline
+detection with g(0) = 0.68.
 
-## The trap in `EffortType`
+**Estimate: 2,790 animals (95% CI 1,193–6,529)**, against the published
+design-based figure of 2,975 (CI 1,407–6,291) for the same survey — 6% apart,
+from a different modelling framework.
 
-From the InPort entity metadata:
+Source: DAS files and processing settings from the
+[LTabundR vignette repository](https://github.com/PIFSC-Protected-Species-Division/LTabundR-vignette).
 
-> Did the sighting occur when the survey effort was systematic (**S**),
-> non-systematic (**N**), fine-scale (**F**), or off (**O**)
+---
 
-`O` is **off**-effort. It reads like "on". Only `S` is planned line-transect
-effort with observers on watch, and only `S` is comparable between months.
-Filtering on `O` yields 355 plausible-looking sightings that are the wrong
-ones.
+## Repository
 
-## Seasonal coverage
+```
+R/01_prepare_data.R        download and filter the public sighting archive
+R/02_seasonal_map.R        twelve-frame animated map, MP4
+R/03_process_das.R         DAS → 10 km segments with LTabundR
+R/04_detection_function.R  detection function, model selection
+R/05_dsm.R                 density surface model, prediction, variance
+R/06_figures.R             DSM figures
 
-September holds 117 of the 370 sightings, nearly a third. March, April and
-December hold none.
-
-But the meaningful unit is the cruise, not the year. These 370 sightings come
-from **nine cruises across five years** (2009, 2010, 2013, 2016, 2017), and two
-of the nine are Guam–Hawaii transits rather than dedicated surveys —
-contributing six sightings between them, one of which is the entire January
-record.
-
-Two HICEAS years dominate: **2010 contributes 145 sightings and 2017 another
-101, two-thirds of the record between them.** All four cruises that were
-working in September belong to those two years. So September's peak is not a
-seasonal signal — it is the HICEAS field season, which runs July–December,
-sampled twice.
-
-Every February record comes from a **single survey in 2009**, the same survey
-the existing PIFSC predictive density model for Hawaiian humpback whales was
-built from.
-
-The winter gap is a known one rather than an oversight: NOAA's winter survey
-(WHICEAS) exists specifically to cover
-[a time of year the earlier surveys did not](https://www.fisheries.noaa.gov/feature-story/why-whiceas-winter-hawaiian-islands-cetacean-and-ecosystem-assessment-survey),
-when humpbacks migrate into Hawaiian waters.
-
-## Reproducing
-
-```r
-install.packages(c("dplyr", "readr", "sf", "here", "ggplot2", "terra",
-                   "marmap", "rphylopic", "av", "purrr", "tidyr",
-                   "stringr", "lubridate", "scales", "knitr"))
-
-source("R/01_prepare_data.R")   # downloads, filters, writes data/derived/
-source("R/02_seasonal_map.R")   # renders outputs/hawaii_cetacean_seasonal.mp4
+index.qmd                  landing page
+cetacean-seasonal-map.qmd  report 1
+humpback-dsm.qmd           report 2
+outputs/                   model comparison tables, abundance, figures
 ```
 
-The sighting archive downloads automatically. The EEZ shapefile does not —
-Marine Regions asks that you obtain it from them rather than take a
-redistributed copy. Download **EEZ v12** from
-[marineregions.org/downloads.php](https://www.marineregions.org/downloads.php)
-and unpack it to `data/raw/World_EEZ_v12_20231025/`.
+Scripts run in order within each analysis; `01–02` and `03–06` are independent
+of each other. `03` clones the vignette repository and reprocesses the full
+1986–2020 DAS file, which takes a few minutes. Everything downstream is
+seconds.
 
-`data/` is not tracked: the raw archive is re-downloadable, the derived `.rds`
-files are regenerated by `01`, and the EEZ shapefile is 156 MB, over GitHub's
-limit.
+`data/` is not tracked — both analyses download or clone what they need.
 
-### Two things that will bite you
+### Packages
 
-The Hawaiian Islands EEZ **crosses the antimeridian**, so its bounding box in
-plain −180/180 spans the entire globe and eight sightings sit east of the line.
-Everything here works in 0–360. The source polygon is also split at 180°, and
-that seam survives `st_shift_longitude()` as an interior line which
-`geom_path()` will happily draw across the map; `02` strips it.
+`LTabundR`, `Distance`, `dsm`, `mgcv`, `sf`, `terra`, `marmap`, `ggplot2`,
+`patchwork`, `rnaturalearth`, `rphylopic`, `av`.
 
-`marmap::getNOAA.bathy(antimeridian = TRUE)` stitches two separately fetched
-halves with **different cell sizes** (0.06694° and 0.06793°, plus a 0.035°
-sliver at the join). `geom_raster()` assumes a regular grid, so the mismatch
-renders as vertical striping across the whole panel. `02` resamples onto a
-single regular 0.07° grid and asserts regularity afterwards.
+## Data and attribution
 
-## Attribution
+Survey data collected by NOAA Pacific Islands Fisheries Science Center,
+Protected Species Division, under the Hawaiian Islands Cetacean and Ecosystem
+Assessment Survey programme, and distributed publicly. Processing for the
+second analysis uses
+[LTabundR](https://github.com/PIFSC-Protected-Species-Division/LTabundR), the
+Division's own R package.
 
-**Sightings** — NOAA Pacific Islands Fisheries Science Center, Cetacean
-Research Program. *Shipboard Cetacean Surveys — Visual Surveys — WinCruz
-Sighting Records*, [InPort 18141](https://www.fisheries.noaa.gov/inport/item/18141).
-Collected under NMFS permits **PIFSC 15240, PIFSC 20311, SWFSC 14097,
-SWFSC 774-1714**. Citing the permit numbers is a condition of use, not a
-courtesy.
+Reference estimate: Bradford, A.L., Yano, K.M. & Oleson, E.M. (2022).
+*Abundance estimates of cetaceans from a 2020 survey of the Hawaiian Islands
+EEZ*. NOAA Technical Memorandum NMFS-PIFSC-135. Trackline detection
+probability from Barlow, J. (2015), *Marine Mammal Science* 31: 923–943.
 
-**Bathymetry** — NOAA ETOPO, retrieved with
-[marmap](https://cran.r-project.org/package=marmap).
+Bathymetry from ETOPO via `marmap`.
 
-**EEZ boundary** — Flanders Marine Institute, *Maritime Boundaries Geodatabase*
-v12 (2023), [marineregions.org](https://www.marineregions.org/), CC BY 4.0.
+## Author
 
-**Silhouettes** — [PhyloPic](https://www.phylopic.org/), retrieved with
-[rphylopic](https://cran.r-project.org/package=rphylopic). Per-image
-contributors and licences in [`outputs/phylopic_credits.csv`](outputs/phylopic_credits.csv).
-Three species have no PhyloPic image and use a genus- or family-level stand-in:
-pantropical spotted dolphin (*Stenella*), Bryde's whale (*Balaenoptera*),
-Longman's beaked whale (Ziphiidae).
+Théophile L. Mouton — quantitative marine ecologist.
