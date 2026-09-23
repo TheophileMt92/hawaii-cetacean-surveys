@@ -42,6 +42,6 @@ the same survey.
 ---
 
 Code and data sources for both are in the
-[repository](https://github.com/TheophileMt92/hawaii-cetacean-seasonality).
+[repository](https://github.com/TheophileMt92/hawaii-cetacean-surveys).
 Survey data collected by NOAA Pacific Islands Fisheries Science Center,
 Protected Species Division.
