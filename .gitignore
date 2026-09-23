@@ -4,6 +4,8 @@ data/
 # Scratch renders, except the still used in the README
 outputs/figures/*
 !outputs/figures/still_september.png
+!outputs/figures/fig_panel.png
+!outputs/figures/fig_density.png
 
 # marmap's bathymetry cache (written to the working directory)
 marmap_coord_*.csv
