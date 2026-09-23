@@ -1,23 +1,25 @@
 ---
 title: "A density surface model for humpback whales in Hawaiian waters"
 subtitle: "WHICEAS winter 2020, reanalysed from PIFSC line-transect data"
-author: "Théophile Mouton"
+author: "Théophile L. Mouton"
 date: today
 format:
   html:
-    theme: none
-    css: Quarto_template/custom.css
-    include-in-header: Quarto_template/header.html
-    include-after-body: Quarto_template/footer.html
-    toc: true
-    toc-depth: 3
-    code-fold: true
-    code-tools: true
-    embed-resources: true
     output-file: humpback-dsm.html
+    embed-resources: true
+    css: Quarto_template/custom.css
+    include-before-body: Quarto_template/header.html
+    include-after-body: Quarto_template/footer.html
+    theme: none
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-summary: "Show code"
+    fig-align: center
 execute:
-  warning: false
+  echo: true
   message: false
+  warning: false
 ---
 
 ```{r setup}
@@ -33,7 +35,7 @@ water <- nrow(P$grid) * P$cell^2
 fmt   <- function(x, d = 0) format(round(x, d), big.mark = ",")
 ```
 
-The [companion page](cetacean-seasonal-map.html) maps where cetaceans were seen in the Hawaiian
+The [seasonal map](cetacean-seasonal-map.html) shows where cetaceans were recorded in the Hawaiian
 Islands EEZ across the seasons. It stops there deliberately: the public sighting
 archive records *what was seen*, not *where anyone looked*, and without effort
 there is no denominator and no abundance.
